@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:yq="http://www.yqboots.com" xmlns="http://www.w3.org/1999/xhtml" layout:decorator="layouts/layout">
+<head>
+  <title>Domain Management</title>
+</head>
+<body>
+<div layout:fragment="breadcrumbs">
+  <yq:breadcrumbs menu="actuator_ApplicationInfo"/>
+</div>
+<div layout:fragment="content" class="content content-sm height-600">
+  <div class="container">
+    <form class="sky-form" action="#" th:action="@{/actuator/application/}" th:object="${model}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <header>Domain Maintenance Form</header>
+      <fieldset>
+        <section>
+          <label class="label" th:text="name">name</label>
+          <label class="input">
+            <input type="text" th:field="*{name}"/>
+          </label>
+
+          <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        </section>
+        <section>
+          <label class="label" th:text="path">path</label>
+          <label class="input">
+            <input type="text" th:field="*{path}"/>
+          </label>
+
+          <p th:if="${#fields.hasErrors('path')}" th:errors="*{path}"></p>
+        </section>
+        <section>
+          <label class="label" th:text="version">version</label>
+          <label class="input">
+            <input type="text" th:field="*{version}"/>
+          </label>
+
+          <p th:if="${#fields.hasErrors('version')}" th:errors="*{version}"></p>
+        </section>
+      </fieldset>
+      <footer>
+        <button class="btn-u rounded" id="submit" type="submit" th:text="#{T0012}">Submit</button>
+        <button class="btn-u rounded" id="cancel" type="button" th:text="#{T0066}">Cancel</button>
+      </footer>
+    </form>
+  </div>
+</div>
+</body>
+</html>

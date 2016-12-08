@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:yq="http://www.yqboots.com" xmlns="http://www.w3.org/1999/xhtml" layout:decorator="layouts/layout">
+<head>
+  <title>Domain Management</title>
+</head>
+<body>
+<div layout:fragment="breadcrumbs">
+  <yq:breadcrumbs menu="actuator_ApplicationInfo"/>
+</div>
+<div layout:fragment="content" class="content content-sm height-600">
+  <div class="container table-responsive">
+    <div class="row">
+      <div class="col-md-4">
+        <form action="#" th:action="@{/actuator/application}" th:object="${searchForm}" method="post">
+          <div class="input-group">
+            <input type="text" th:field="*{criterion}" class="form-control" th:placeholder="#{T0007}"/>
+            <span class="input-group-btn">
+                <button class="btn-u" type="submit" th:text="#{T0007}">Search</button>
+                <button type="button" class="btn-u dropdown-toggle" data-toggle="dropdown">
+                 <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                      <a th:title="#{T0010}" th:href="@{/actuator/application(action='new')}">
+                        <i class="glyphicon glyphicon-plus"></i> <span th:text="#{T0010}">New</span>
+                      </a>
+                    </li>
+                </ul>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-8"></div>
+    </div>
+    <div class="divider divider-blank"></div>
+    <div class="panel margin-bottom-40">
+      <div class="panel-heading">
+        <h3 class="panel-title">Domain List</h3>
+      </div>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>name</th>
+          <th>path</th>
+          <th>version</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${page}">
+          <td th:text="${item.name}">name</td>
+          <td th:text="${item.path}">path</td>
+          <td th:text="${item.version}">version</td>
+          <td>
+            <a th:href="@{/actuator/application(id=${item.id},action='update')}">
+              <i class="glyphicon glyphicon-pencil"></i>
+            </a>
+            <a th:href="@{/actuator/application(id=${item.id},action='delete')}">
+              <i class="glyphicon glyphicon-remove-sign"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <th colspan="4">
+            <div yq:pageSummary="${page}"></div>
+          </th>
+        </tr>
+        </tfoot>
+      </table>
+      <div class="panel-footer text-center">
+        <yq:pagination page="${page}" th:href="@{/actuator/application}"/>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
