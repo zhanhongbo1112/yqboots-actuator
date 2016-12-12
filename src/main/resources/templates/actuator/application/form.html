@@ -30,14 +30,6 @@
 
           <p th:if="${#fields.hasErrors('path')}" th:errors="*{path}"></p>
         </section>
-        <section>
-          <label class="label" th:text="version">version</label>
-          <label class="input">
-            <input type="text" th:field="*{version}"/>
-          </label>
-
-          <p th:if="${#fields.hasErrors('version')}" th:errors="*{version}"></p>
-        </section>
       </fieldset>
       <footer>
         <button class="btn-u rounded" id="submit" type="submit" th:text="#{T0012}">Submit</button>

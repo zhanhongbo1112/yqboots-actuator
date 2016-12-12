@@ -16,7 +16,6 @@ import javax.persistence.Table;
 public class ApplicationInfo extends AbstractPersistable<Long> {
     private String name;
     private String path;
-    private String version;
 
     public String getName() {
         return name;
@@ -32,13 +31,5 @@ public class ApplicationInfo extends AbstractPersistable<Long> {
 
     public void setPath(final String path) {
         this.path = path;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(final String version) {
-        this.version = version;
     }
 }
