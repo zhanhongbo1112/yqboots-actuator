@@ -32,7 +32,7 @@ import javax.persistence.Table;
 @Table(name = "ACT_APPLICATION")
 public class Application extends AbstractPersistable<Long> {
     private String name;
-    private String path;
+    private String url;
 
     protected Application() {
         super();
@@ -51,11 +51,11 @@ public class Application extends AbstractPersistable<Long> {
         this.name = name;
     }
 
-    public String getPath() {
-        return path;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPath(final String path) {
-        this.path = path;
+    public void setUrl(final String url) {
+        this.url = url;
     }
 }

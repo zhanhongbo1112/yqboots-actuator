@@ -66,11 +66,11 @@ public class ApplicationManagerImpl implements ApplicationManager {
 
         final List<ApplicationForm> results = new ArrayList<>();
         for (Application application : applications) {
-            final Map health = restTemplate.getForObject(application.getPath() + ENDPOINT_HEALTH, Map.class);
+            final Map health = restTemplate.getForObject(application.getUrl() + ENDPOINT_HEALTH, Map.class);
             final ApplicationForm form = new ApplicationFormConverter().convert(health);
             form.setId(application.getId());
             form.setName(application.getName());
-            form.setPath(application.getPath());
+            form.setUrl(application.getUrl());
             results.add(form);
         }
 
@@ -84,12 +84,27 @@ public class ApplicationManagerImpl implements ApplicationManager {
     public ApplicationForm getApplication(final Long id) {
         final Application application = applicationRepository.findOne(id);
 
-        final Map health = restTemplate.getForObject(application.getPath() + ENDPOINT_INFO, Map.class);
+        final ApplicationForm result = new ApplicationForm();
+        result.setId(application.getId());
+        result.setName(application.getName());
+        result.setUrl(application.getUrl());
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ApplicationForm getApplicationDetails(final Long id) {
+        final Application application = applicationRepository.findOne(id);
+
+        final Map health = restTemplate.getForObject(application.getUrl() + ENDPOINT_INFO, Map.class);
 
         final ApplicationForm result = new ApplicationFormConverter().convert(health);
         result.setId(application.getId());
         result.setName(application.getName());
-        result.setPath(application.getPath());
+        result.setUrl(application.getUrl());
 
         return result;
     }
@@ -100,7 +115,7 @@ public class ApplicationManagerImpl implements ApplicationManager {
     @Override
     public void updateApplication(final ApplicationForm form) {
         final Application application = new Application(form.getId());
-        application.setPath(form.getPath());
+        application.setUrl(form.getUrl());
         application.setName(form.getName());
 
         applicationRepository.save(application);

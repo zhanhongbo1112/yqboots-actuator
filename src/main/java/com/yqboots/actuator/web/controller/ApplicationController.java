@@ -17,7 +17,6 @@
  */
 package com.yqboots.actuator.web.controller;
 
-import com.yqboots.actuator.core.repository.ApplicationRepository;
 import com.yqboots.actuator.web.ApplicationManager;
 import com.yqboots.actuator.web.form.ApplicationForm;
 import com.yqboots.web.support.WebKeys;
@@ -45,12 +44,10 @@ public class ApplicationController {
     private static final String REDIRECT_VIEW_PATH = "redirect:/actuator/application";
     private static final String VIEW_HOME = "actuator/application/index";
     private static final String VIEW_FORM = "actuator/application/form";
+    private static final String VIEW_DETAILS = "actuator/application/details";
 
     @Autowired
     private ApplicationManager applicationManager;
-
-    @Autowired
-    private ApplicationRepository applicationRepository;
 
     @ModelAttribute(WebKeys.SEARCH_FORM)
     protected SearchForm<String> searchForm() {
@@ -75,6 +72,12 @@ public class ApplicationController {
     public String preUpdate(@RequestParam final Long id, final ModelMap model) {
         model.addAttribute(WebKeys.MODEL, applicationManager.getApplication(id));
         return VIEW_FORM;
+    }
+
+    @RequestMapping(params = {WebKeys.ID, "action=details"}, method = RequestMethod.GET)
+    public String preDetails(@RequestParam final Long id, final ModelMap model) {
+        model.addAttribute(WebKeys.MODEL, applicationManager.getApplicationDetails(id));
+        return VIEW_DETAILS;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)

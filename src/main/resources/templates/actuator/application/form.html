@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:yq="http://www.yqboots.com" xmlns="http://www.w3.org/1999/xhtml" layout:decorator="layouts/layout">
 <head>
-  <title>Domain Management</title>
+  <title>Application Management</title>
 </head>
 <body>
 <div layout:fragment="breadcrumbs">
-  <yq:breadcrumbs menu="actuator_ApplicationInfo"/>
+  <yq:breadcrumbs menu="ACT_ACTUATOR"/>
 </div>
 <div layout:fragment="content" class="content content-sm height-600">
   <div class="container">
@@ -15,7 +15,7 @@
       <header>Domain Maintenance Form</header>
       <fieldset>
         <section>
-          <label class="label" th:text="name">name</label>
+          <label class="label">Name</label>
           <label class="input">
             <input type="text" th:field="*{name}"/>
           </label>
@@ -23,12 +23,12 @@
           <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
         </section>
         <section>
-          <label class="label" th:text="path">path</label>
+          <label class="label">URL</label>
           <label class="input">
-            <input type="text" th:field="*{path}"/>
+            <input type="text" th:field="*{url}"/>
           </label>
 
-          <p th:if="${#fields.hasErrors('path')}" th:errors="*{path}"></p>
+          <p th:if="${#fields.hasErrors('url')}" th:errors="*{url}"></p>
         </section>
       </fieldset>
       <footer>

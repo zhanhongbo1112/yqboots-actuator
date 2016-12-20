@@ -46,6 +46,14 @@ public interface ApplicationManager {
     ApplicationForm getApplication(Long id);
 
     /**
+     * Gets the health details of the specified application.
+     *
+     * @param id application id
+     * @return ApplicationForm
+     */
+    ApplicationForm getApplicationDetails(Long id);
+
+    /**
      * New/Update the application information.
      *
      * @param form form
