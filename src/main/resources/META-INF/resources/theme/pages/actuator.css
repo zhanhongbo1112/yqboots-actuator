@@ -68,14 +68,22 @@
     background: #fff;
 }
 
-.service-block-light-green {
-    background: #79d5b3;
-}
-
-.service-block-green {
+.warning-color-green {
     background: #72c02c;
 }
 
-.service-block-blue {
+.warning-color-blue {
     background: #3498db;
+}
+
+.warning-color-yellow {
+    background: #CCFF33;
+}
+
+.warning-color-orange {
+    background: #e67e22;
+}
+
+.warning-color-red {
+    background: #FF0000;
 }

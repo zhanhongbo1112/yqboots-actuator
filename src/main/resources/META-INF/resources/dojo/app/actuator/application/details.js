@@ -1,7 +1,10 @@
-define([], function () {
+define(['jquery', 'jquery/counter/waypoints', 'jquery/counter/counterup'], function () {
     return {
         startup: function () {
-            console.log("page start......")
+            $('.counter').counterUp({
+                delay: 10,
+                time: 1000
+            });
         }
     };
 });
