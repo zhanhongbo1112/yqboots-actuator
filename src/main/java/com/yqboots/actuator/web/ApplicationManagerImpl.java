@@ -99,9 +99,7 @@ public class ApplicationManagerImpl implements ApplicationManager {
     public ApplicationForm getApplicationDetails(final Long id) {
         final Application application = applicationRepository.findOne(id);
 
-        final Map health = restTemplate.getForObject(application.getUrl() + ENDPOINT_INFO, Map.class);
-
-        final ApplicationForm result = new ApplicationFormConverter().convert(health);
+        ApplicationForm result = new ApplicationForm();
         result.setId(application.getId());
         result.setName(application.getName());
         result.setUrl(application.getUrl());

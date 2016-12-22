@@ -164,6 +164,11 @@
       </div>
     </div>
   </div>
+  <form id="form" action="#" th:object="${model}">
+    <input th:field="*{id}" type="hidden"/>
+    <input th:field="*{name}" type="hidden"/>
+    <input th:field="*{url}" type="hidden"/>
+  </form>
 </div>
 </body>
 </html>
