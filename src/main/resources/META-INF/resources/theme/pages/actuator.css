@@ -68,6 +68,12 @@
     background: #fff;
 }
 
+pre.console {
+    min-height: 300px;;
+    max-height: 500px;
+    overflow: auto;
+}
+
 .warning-color-green {
     background: #72c02c;
 }
