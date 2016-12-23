@@ -1,9 +1,59 @@
-define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/endpoints', 'jquery'], function (lang, form, endpoints) {
+define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/constants', 'jquery'], function (lang, form, constants) {
     var application = form.formToObject('form');
+
+    // format the json string to display
+    var format = function (data) {
+        return '<pre class="console">' + JSON.stringify(data, null, 2) + '</pre>';
+    };
+
+    // convert disk space or memory
+    var convert = function (space, unit) {
+        if (!unit) {
+            unit = constants.UNIT_BYTE;
+        }
+
+        var result = space ? space : 0;
+        switch (unit) {
+            case constants.UNIT_KB:
+                result = Math.floor(result / 1024);
+                break;
+            case constants.UNIT_MB:
+                result = Math.floor(result / (1024 * 1024));
+                break;
+            case constants.UNIT_GB:
+                result = Math.floor(result / (1024 * 1024 * 1024));
+                break;
+        }
+
+        return result + unit;
+    };
+
+    /**
+     * <ul>alarm rule
+     *     <li>warning-color-green (<50)</li>
+     *     <li>warning-color-blue (50)</li>
+     *     <li>warning-color-yellow (60)</li>
+     *     <li>warning-color-orange (70)</li>
+     *     <li>warning-color-red (80)</li>
+     * </ul>
+     */
+    var alarm = function (value) {
+        var result = 'warning-color-green';
+        if (value >= 80) {
+            result = 'warning-color-red';
+        } else if (value >= 70) {
+            result = 'warning-color-orange';
+        } else if (value >= 60) {
+            result = 'warning-color-yellow';
+        } else if (value >= 50) {
+            result = 'warning-color-blue';
+        }
+
+        return result;
+    };
 
     return {
         startup: function () {
-            // TODO: refresh service block
             this.refreshHealthEndpoint();
             this.refreshMetricsEndpoint();
 
@@ -12,25 +62,25 @@ define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/endpoints', 'jquery'],
             $('.tab ul li').on('click', function () {
                 var endpoint;
                 if ($(this).hasClass('info')) {
-                    endpoint = endpoints.INFO;
+                    endpoint = constants.ENDPOINT_INFO;
                 } else if ($(this).hasClass('configuredProperties')) {
-                    endpoint = endpoints.CONFIG_PROPS;
+                    endpoint = constants.ENDPOINT_CONFIG_PROPS;
                 } else if ($(this).hasClass('dump')) {
-                    endpoint = endpoints.DUMP;
+                    endpoint = constants.ENDPOINT_DUMP;
                 } else if ($(this).hasClass('health')) {
-                    endpoint = endpoints.HEALTH;
+                    endpoint = constants.ENDPOINT_HEALTH;
                 } else if ($(this).hasClass('mappings')) {
-                    endpoint = endpoints.MAPPINGS;
+                    endpoint = constants.ENDPOINT_MAPPINGS;
                 } else if ($(this).hasClass('metrics')) {
-                    endpoint = endpoints.METRICS;
+                    endpoint = constants.ENDPOINT_METRICS;
                 } else if ($(this).hasClass('beans')) {
-                    endpoint = endpoints.BEANS;
+                    endpoint = constants.ENDPOINT_BEANS;
                 } else if ($(this).hasClass('environments')) {
-                    endpoint = endpoints.ENVIRONMENT;
+                    endpoint = constants.ENDPOINT_ENVIRONMENT;
                 } else if ($(this).hasClass('autoConfigurations')) {
-                    endpoint = endpoints.AUTO_CONFIG;
+                    endpoint = constants.ENDPOINT_AUTO_CONFIG;
                 } else if ($(this).hasClass('trace')) {
-                    endpoint = endpoints.TRACE;
+                    endpoint = constants.ENDPOINT_TRACE;
                 }
 
                 console.log('invoke endpoint: ' + endpoint);
@@ -42,41 +92,56 @@ define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/endpoints', 'jquery'],
             $('.tab ul li.active').click();
         },
 
-        refreshHealthEndpoint: function () {
-            $.get(application['url'] + endpoints.HEALTH, lang.hitch(this, this._healthEndpointCallback));
-        },
-
-        refreshMetricsEndpoint: function () {
-            $.get(application['url'] + endpoints.METRICS, lang.hitch(this, this._metricsEndPointCallback));
-        },
-
         refresh: function (endpoint) {
-            $.get(application['url'] + endpoint, lang.hitch(this, this._onRefresh));
+            $.get(application['url'] + endpoint, lang.hitch(this, this._refreshCallback));
         },
 
-        _onRefresh: function (data, status) {
+        _refreshCallback: function (data, status) {
             console.log('status: ' + status);
-            $('.tab-content .panel-body').html(this._format(data));
+            $('.tab-content .panel-body').html(format(data));
         },
 
-        _format: function (data) {
-            return '<pre class="console">' + JSON.stringify(data, null, 2) + '</pre>';
+        refreshHealthEndpoint: function () {
+            $.get(application['url'] + constants.ENDPOINT_HEALTH, lang.hitch(this, this._healthEndpointCallback));
         },
 
         _healthEndpointCallback: function (data, status) {
             if (status != 'success') {
-                console.log('status: ' + status + ', data: ' + this._format(data));
+                console.log('status: ' + status + ', data: ' + format(data));
                 return;
             }
 
-            $('.service-block.health .service-heading.web').html(application['url']);
-            $('.service-block.health .status.web').html(data['status']);
-            $('.service-block.health .service-heading.db').html(data['db']['database']);
-            $('.service-block.health .status.db').html(data['db']['status']);
-            $('.service-block.health .status.disk').html(data['diskSpace']['status']);
-            $('.service-block.health .diskSpace-total').html(data['diskSpace']['total']);
-            $('.service-block.health .diskSpace-free').html(data['diskSpace']['free']);
-            $('.service-block.health .diskSpace-threshold').html(data['diskSpace']['threshold']);
+            $('.health .service-heading.web').html(application['url']);
+            $('.health .status.web').html(data['status']);
+            $('.health .service-heading.db').html(data['db']['database']);
+            $('.health .status.db').html(data['db']['status']);
+            $('.health .status.disk').html(data['diskSpace']['status']);
+
+            // if one of services is down, show red
+            var isOneDown = data['status'] != 'UP' || data['db']['status'] != 'UP' || data['diskSpace']['status'] != 'UP';
+            if (isOneDown) {
+                $('.health').attr('class', 'service-block health warning-color-red');
+            }
+
+            var total = data['diskSpace']['total'];
+            var free = data['diskSpace']['free'];
+            var used = this._statistics(Math.floor((total - free) * 100 / total));
+
+            $('.health-disk .diskSpace-total').html(convert(total, constants.UNIT_GB));
+            $('.health-disk .diskSpace-free').html(convert(free, constants.UNIT_GB));
+            $('.health-disk .diskSpace-threshold').html(convert(data['diskSpace']['threshold'], constants.UNIT_MB));
+            $('.health-disk .statistics .used').html(used['percentage']);
+            $('.health-disk .statistics .progress-bar').attr({
+                'style': used['style'],
+                'aria-valuenow': used['valuenow']
+            });
+
+            // change service block to different color based on percentage
+            $('.health-disk').attr('class', 'service-block health-disk ' + alarm(used['valuenow']));
+        },
+
+        refreshMetricsEndpoint: function () {
+            $.get(application['url'] + constants.ENDPOINT_METRICS, lang.hitch(this, this._metricsEndPointCallback));
         },
 
         _metricsEndPointCallback: function (data, status) {
@@ -85,9 +150,34 @@ define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/endpoints', 'jquery'],
                 return;
             }
 
-            $('.service-block.metrics-memory .total').html(data['mem.free'] + '/' + data['mem']);
-            $('.service-block.metrics-memory .heap-used').html(data['heap.used'] + '/' + data['heap']);
-            $('.service-block.metrics-memory .initial-heap').html(data['heap.init']);
+            var total = data['mem'];
+            var free = data['mem.free'];
+            var used = this._statistics(Math.floor((total - free) * 100 / total));
+
+            var _memory = convert(free * 1024, constants.UNIT_MB) + '/' + convert(total * 1024, constants.UNIT_MB);
+            $('.metrics-memory .total').html(_memory);
+
+            var _heap = convert(data['heap.used'] * 1024, constants.UNIT_MB) + '/' + convert(data['heap'] * 1024, constants.UNIT_MB);
+            $('.metrics-memory .heap-used').html(_heap);
+
+            $('.metrics-memory .initial-heap').html(convert(data['heap.init'] * 1024, constants.UNIT_MB));
+
+            $('.metrics-memory .statistics .used').html(used['percentage']);
+            $('.metrics-memory .statistics .progress-bar').attr({
+                'style': used['style'],
+                'aria-valuenow': used['valuenow']
+            });
+
+            // change service block to different color based on percentage
+            $('.metrics-memory').attr('class', 'service-block metrics-memory ' + alarm(used['valuenow']));
+        },
+
+        _statistics: function (value) {
+            return {
+                percentage: value + '%',
+                style: 'width: ' + value + '%',
+                valuenow: value
+            };
         }
     };
 });
