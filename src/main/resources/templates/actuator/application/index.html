@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:yq="http://www.yqboots.com" xmlns="http://www.w3.org/1999/xhtml" layout:decorator="layouts/layout">
 <head>
-  <title>Application Management</title>
+  <title th:text="#{ACT0001}">Application Management</title>
 </head>
 <body>
 <div layout:fragment="breadcrumbs">
@@ -18,14 +18,14 @@
             <span class="input-group-btn">
                 <button class="btn-u" type="submit" th:text="#{T0007}">Search</button>
                 <button type="button" class="btn-u btn-u-split dropdown-toggle" data-toggle="dropdown">
-                 <i class="fa fa-angle-down"></i>
+                  <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li>
-                      <a th:title="#{T0010}" th:href="@{/actuator/application(action='new')}">
-                        <i class="glyphicon glyphicon-plus"></i> <span th:text="#{T0010}">New</span>
-                      </a>
-                    </li>
+                  <li>
+                    <a th:title="#{T0010}" th:href="@{/actuator/application(action='new')}">
+                      <i class="glyphicon glyphicon-plus"></i> <span th:text="#{T0010}">New</span>
+                    </a>
+                  </li>
                 </ul>
             </span>
           </div>
@@ -36,16 +36,16 @@
     <div class="divider divider-blank"></div>
     <div class="panel margin-bottom-40">
       <div class="panel-heading">
-        <h3 class="panel-title">Application List</h3>
+        <h3 class="panel-title" th:text="#{ACT0002}">Application List</h3>
       </div>
       <table class="table table-hover">
         <thead>
         <tr>
-          <th>Name</th>
-          <th>URL</th>
-          <th>Status</th>
-          <th>Disk Space</th>
-          <th>Database</th>
+          <th th:text="#{ACT0003}">Name</th>
+          <th th:text="#{ACT0004}">URL</th>
+          <th th:text="#{ACT0005}">Status</th>
+          <th th:text="#{ACT0006}">Disk Space</th>
+          <th th:text="#{ACT0007}">Database</th>
           <th>&nbsp;</th>
         </tr>
         </thead>
@@ -55,17 +55,17 @@
           <td th:text="${item.url}">url</td>
           <td th:text="${item.status}">status</td>
           <td>
-            <yq:progress value="${item.diskSpace}" />
+            <yq:progress value="${item.diskSpace}"/>
           </td>
           <td th:text="${item.database + '(' + item.statusOfDatabase + ')'}">HSQL Database Engine</td>
           <td>
-            <a th:href="@{/actuator/application(id=${item.id},action='details')}" title="Details">
+            <a th:href="@{/actuator/application(id=${item.id},action='details')}" th:title="#{ACT0008}">
               <i class="glyphicon glyphicon-list-alt"></i>
             </a>
-            <a th:href="@{/actuator/application(id=${item.id},action='update')}" title="Update">
+            <a th:href="@{/actuator/application(id=${item.id},action='update')}">
               <i class="glyphicon glyphicon-pencil"></i>
             </a>
-            <a th:href="@{/actuator/application(id=${item.id},action='delete')}" title="Remove">
+            <a th:href="@{/actuator/application(id=${item.id},action='delete')}">
               <i class="glyphicon glyphicon-remove-sign"></i>
             </a>
           </td>

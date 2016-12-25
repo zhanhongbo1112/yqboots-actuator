@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:yq="http://www.yqboots.com" xmlns="http://www.w3.org/1999/xhtml" layout:decorator="layouts/layout">
 <head>
-  <title>Application Management</title>
+  <title th:text="#{ACT0001}">Application Management</title>
 </head>
 <body>
 <div layout:fragment="breadcrumbs">
@@ -12,10 +12,10 @@
   <div class="container">
     <form class="sky-form" action="#" th:action="@{/actuator/application/}" th:object="${model}" method="post">
       <input type="hidden" th:field="*{id}"/>
-      <header>Domain Maintenance Form</header>
+      <header th:text="#{ACT0009}">Application Maintenance Form</header>
       <fieldset>
         <section>
-          <label class="label">Name</label>
+          <label class="label" th:text="#{ACT0003}">Name</label>
           <label class="input">
             <input type="text" th:field="*{name}"/>
           </label>
@@ -23,7 +23,7 @@
           <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
         </section>
         <section>
-          <label class="label">URL</label>
+          <label class="label" th:text="#{ACT0004}">URL</label>
           <label class="input">
             <input type="text" th:field="*{url}"/>
           </label>

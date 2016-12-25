@@ -58,6 +58,7 @@ define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/constants', 'jquery', 
                 var _this = this;
                 $.timer(function () {
                     console.log('refresh status...');
+                    _this.refreshInfoEndpoint();
                     _this.refreshHealthEndpoint();
                     _this.refreshMetricsEndpoint();
                 }).set({time: 5000, autostart: true}).execute();
@@ -103,6 +104,21 @@ define(['dojo/_base/lang', 'baf/html/form', 'app/actuator/constants', 'jquery', 
             _refreshCallback: function (data, status) {
                 console.log('status: ' + status);
                 $('.tab-content .panel-body').html(format(data));
+            },
+
+            refreshInfoEndpoint: function () {
+                $.get(application['url'] + constants.ENDPOINT_INFO, lang.hitch(this, this._infoEndpointCallback));
+            },
+
+            _infoEndpointCallback: function (data, status) {
+                if (status != 'success') {
+                    console.log('status: ' + status + ', data: ' + format(data));
+                    return;
+                }
+
+                $('.headline.application .name').html(data['app']['name']);
+                $('.headline.application .version').html(data['app']['version']);
+                $('.lead.description').html(data['app']['description']);
             },
 
             refreshHealthEndpoint: function () {
