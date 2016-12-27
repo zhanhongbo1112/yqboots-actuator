@@ -52,6 +52,7 @@ public class ApplicationManagerImpl implements ApplicationManager {
     private static final String ENDPOINT_AUTOCONFIG = "/autoconfig";
     private static final String ENDPOINT_TRACE = "/trace";
 
+    @Autowired(required = false)
     private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
