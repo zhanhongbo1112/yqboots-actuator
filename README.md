@@ -1,11 +1,11 @@
 # YQBoots Actuator
-YQBoots Actuator does the health checking and metrics analysing to the Spring MVC-based application which enables the actuator features in [Spring Boot](https://www.spring.io/spring-boot).
+YQBoots Actuator does the health checking and metrics analysing to the Spring MVC-based application which enables the actuator features in [Spring Boot](http://projects.spring.io/spring-boot/).
 
-[Spring Boot](https://www.spring.io/spring-boot) includes a number of additional features to help you monitor and manage your application when it’s pushed to production. You can choose to manage and monitor your application using HTTP endpoints, with JMX or even by remote shell(SSH or Telnet). Auditing, health and metrics gathering can be automatically applied to your application.
+[Spring Boot](http://projects.spring.io/spring-boot/) includes a number of additional features to help you monitor and manage your application when it’s pushed to production. You can choose to manage and monitor your application using HTTP endpoints, with JMX or even by remote shell(SSH or Telnet). Auditing, health and metrics gathering can be automatically applied to your application.
 
-YQBoots Actuator brings the UI screen of the [Spring Boot](https://www.spring.io/spring-boot)  HTTP endpoints, you can view the health status of the Web, Database, Memory, Disk, etc. Also it uses a timer (5 Seconds) to refresh the latest status of the detailed application.
+YQBoots Actuator brings the UI screen of the [Spring Boot](http://projects.spring.io/spring-boot/)  HTTP endpoints, you can view the health status of the Web, Database, Memory, Disk, etc. Also it uses a timer (5 Seconds) to refresh the latest status of the detailed application.
 
-Further more, you can register more applications which enable the actuator features of [Spring Boot](https://www.spring.io/spring-boot).
+Further more, you can register more applications which enable the actuator features of [Spring Boot](http://projects.spring.io/spring-boot/).
 
 YQBoots Actuator enables the following endpoints:
 
